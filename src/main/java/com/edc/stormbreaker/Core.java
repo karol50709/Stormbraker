@@ -114,10 +114,14 @@ public class Core implements Initializable {
                 CSVReading csvReading = new CSVReading();
                 csvReading.saveGui(Path.getText(),delimiter.getText(),getEndofline(),choicebox.getValue().toString(),this);
             }
-            else {
+            else if (lowerfilename.endsWith("xls")) {
                 ExcelReading excelReading = new ExcelReading();
                 excelReading.saveGui(Path.getText(),delimiter.getText(),getEndofline(),choicebox.getValue().toString(),this);
 
+            }
+            else{
+                XLSXReader xlsxReader = new XLSXReader();
+                xlsxReader.saveGui(Path.getText(),delimiter.getText(),getEndofline(),choicebox.getValue().toString(),this);
             }
 
             if (Close.isSelected()){

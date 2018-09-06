@@ -14,20 +14,7 @@ import java.util.logging.Logger;
 
 
 public class CSVReading implements Saves {
-    public static void ConvertCSVToXLS(String file,String delimiter,String Endofline,String Charset,Core controler) throws IOException {
 
-
-
-
-    }
-
-    public static void ConvertCSVToXLSnonGui(String file,String delimiter,String Endofline,String Charset) throws IOException {
-
-
-
-
-
-    }
 
 
     @Override
@@ -115,7 +102,7 @@ public class CSVReading implements Saves {
         //TODO: weryfikacja mechanizmu
         long timestart = System.currentTimeMillis();
         String eof="";
-        if (Endofline=="windows") {
+        if (Endofline.equals("windows")) {
             eof = "\r\n";
         } else {
             eof = "\n";
@@ -180,7 +167,7 @@ public class CSVReading implements Saves {
                 long time = System.currentTimeMillis() - timestart;
                 Logger.getLogger(CSVReading.class.getName()).log(Level.INFO,"Czas: " + time + " ms");
 
-            } catch (Exception ex) {
+            } catch (IOException ex) {
                 Logger.getLogger(CSVReading.class.getName()).log(Level.SEVERE, null, ex);
 
             }

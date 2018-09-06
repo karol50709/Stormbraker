@@ -66,7 +66,7 @@ public class ExcelReading implements Saves{
 
 
             String eof="";
-            if (Endofline=="windows") {
+            if (Endofline.equals("windows")) {
                 eof = "\r\n";
             } else {
                 eof = "\n";
@@ -76,7 +76,7 @@ public class ExcelReading implements Saves{
                 Writer writer = new PrintWriter(outputPath,charset);
                 for (int i = 0; i < list.size(); i++) {
                     writer.write(list.get(i));
-                    //writer.write(eof);
+                    writer.write(eof);
                 }
                 try{
                     writer.close();
@@ -132,9 +132,9 @@ public class ExcelReading implements Saves{
 
         //String tempName= file.replace("/",System.getProperty("file.separator"));
         long timestart = System.currentTimeMillis();
-        InputStream inp = null;
+
         try {
-            inp = new FileInputStream(file);
+
             Workbook wb = WorkbookFactory.create(new File(file));
 
             Logger.getLogger(ExcelReading.class.getName()).log(Level.INFO,"W pliku "+file+" występuje arkuszy: "+wb.getNumberOfSheets());
@@ -154,11 +154,7 @@ public class ExcelReading implements Saves{
         } catch (IOException ex) {
             Logger.getLogger(ExcelReading.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            try {
-                inp.close();
-            } catch (IOException ex) {
-                Logger.getLogger(ExcelReading.class.getName()).log(Level.SEVERE, null, ex);
-            }
+
         }
         long time = System.currentTimeMillis() - timestart;
         Logger.getLogger(ExcelReading.class.getName()).log(Level.INFO,"Wygenerowano pliki .csv Czas: " +time + " ms");
