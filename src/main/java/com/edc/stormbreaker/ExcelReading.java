@@ -1,10 +1,7 @@
 package com.edc.stormbreaker;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.ss.usermodel.*;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -21,11 +18,13 @@ public class ExcelReading implements Saves{
             row = sheet.getRow(i);
             StringBuilder stringBuilder = new StringBuilder();
             for (int j = 0; j < row.getLastCellNum(); j++) {
-                if(!row.getCell(j).toString().contains(delim)) {
 
+                if (row.getCell(j)==null){
+                    stringBuilder.append(";");
+                }
+                else if(!row.getCell(j).toString().contains(delim)) {
+                    row.getCell(j).setCellType(CellType.STRING);
                     stringBuilder.append(row.getCell(j) + delim);
-
-
                 }
                 else{
                     stringBuilder.append('"'+row.getCell(j).toString()+'"' + delim);
@@ -34,17 +33,23 @@ public class ExcelReading implements Saves{
             list.add(stringBuilder.toString());
 
 
-        }
-    }
+        }}
 
     public static void saveToCSV(ArrayList<String> list,Core controller,String eof, String outputPath,String charset) {
 
-        try {
+        /*if (Endofline=="windows") {
+            eof = "\r\n";
+        } else {
+            eof = "\n";
+        } */
 
+        try {
+            System.out.println(eof);
+            System.out.println("Ilość elementów: "+list.size());
             Writer writer = new PrintWriter(outputPath, charset);
             for (int i = 0; i < list.size(); i++) {
                 writer.write(list.get(i));
-                //writer.write(eof);
+                writer.write(eof);
             }
             try {
                 writer.close();
@@ -67,7 +72,7 @@ public class ExcelReading implements Saves{
                 eof = "\n";
             }
             try {
-
+                System.out.println("Ilość rekordów: "+list.size()+1);
                 Writer writer = new PrintWriter(outputPath,charset);
                 for (int i = 0; i < list.size(); i++) {
                     writer.write(list.get(i));
@@ -97,10 +102,11 @@ public class ExcelReading implements Saves{
     @Override
     public void saveGui(String file, String delimiter, String Endofline, String Charset, Core controler) {
         long timestart = System.currentTimeMillis();
-        InputStream inp = null;
+
         try {
-            inp = new FileInputStream(file);
-            Workbook wb = WorkbookFactory.create(inp);
+
+            Workbook wb = WorkbookFactory.create(new File(file));
+
 
             for(int i=0;i<wb.getNumberOfSheets();i++) {
                 ArrayList<String> stringArrayList = new ArrayList<>();
@@ -115,11 +121,7 @@ public class ExcelReading implements Saves{
         } catch (IOException ex) {
             Logger.getLogger(ExcelReading.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            try {
-                inp.close();
-            } catch (IOException ex) {
-                Logger.getLogger(ExcelReading.class.getName()).log(Level.SEVERE, null, ex);
-            }
+
         }
         long time = System.currentTimeMillis() - timestart;
         controler.showInformationWindow("OK!", "Wygenerowano plik csv", "Czas: "+time);
@@ -128,6 +130,7 @@ public class ExcelReading implements Saves{
     @Override
     public void saveNonGui(String file, String delimiter, String Endofline, String Charset) {
 
+        //String tempName= file.replace("/",System.getProperty("file.separator"));
         long timestart = System.currentTimeMillis();
         InputStream inp = null;
         try {

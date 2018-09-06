@@ -80,6 +80,9 @@ public class StormbreakerApplication extends Application{
 								stormbreakerApplication.charset);
 					}
 				}
+				else{
+							Logger.getLogger(StormbreakerApplication.class.getName()).log(Level.SEVERE,"Plik nie spełnił walidacji");
+						}
 				}
 				catch (CmdLineException e){
 					e.printStackTrace();
